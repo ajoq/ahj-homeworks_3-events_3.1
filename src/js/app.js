@@ -1,3 +1,3 @@
-export default function hello(text) {
-  return text;
-}
+import startGame from './startGame';
+
+startGame();

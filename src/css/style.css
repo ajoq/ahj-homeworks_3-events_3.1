@@ -1,3 +1,26 @@
 body {
-    color: #999;
-  }
+    margin: 0;
+}
+
+.field {
+    display: flex;
+    flex-wrap: wrap;
+    width: 480px;
+    margin: 20px;
+}
+
+.field-item {
+    width: 120px;
+    height: 120px;
+    outline: 1px solid #000;
+}
+
+.field-item-img {
+    background-image: url(../img/goblin.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.stop {
+    margin-left: 20px;
+}
