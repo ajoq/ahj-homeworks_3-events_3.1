@@ -4,12 +4,12 @@ import stopGame from './stopGame';
 
 export default function startGame() {
     const field = getField();
+    console.log(field);
     let randomItemNumber = getRandom(field.length);
     field[randomItemNumber].classList.add('field-item-img');
     
     let intervalId = setInterval(() => {
         const currentGoblin = field.findIndex(item => item.classList.contains('field-item-img'));
-        console.log(currentGoblin);
         field[currentGoblin].classList.remove('field-item-img');
         
         randomItemNumber = getRandom(field.length, randomItemNumber);
