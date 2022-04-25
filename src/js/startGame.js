@@ -1,7 +1,9 @@
 import getRandom from './random';
+import getField from './getField';
+import stopGame from './stopGame';
 
 export default function startGame() {
-    const field = Array.from(document.querySelectorAll('.field-item'));
+    const field = getField();
     let randomItemNumber = getRandom(field.length);
     field[randomItemNumber].classList.add('field-item-img');
     
@@ -15,8 +17,5 @@ export default function startGame() {
         field[randomItemNumber].classList.add('field-item-img');
     }, 1000);
 
-    const stopButton = document.querySelector('.stop');
-    stopButton.addEventListener('click', () => {
-    clearInterval(intervalId)});
+    stopGame(intervalId);
 }
-    
