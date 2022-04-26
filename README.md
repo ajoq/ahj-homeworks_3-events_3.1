@@ -1,7 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/qyrl4j16w3na0p2n?svg=true)](https://ci.appveyor.com/project/ajoq/ahj-homeworks-2-dom-2-1)
 
-<!-- https://ajoq.github.io/ahj-homeworks_2-dom_2.1/ -->
-https://js.ajoq.ru/ahj-homeworks_2-dom_2.1/
+https://ajoq.github.io/ahj-homeworks_2-dom_2.1/
 
 ### Перемещение элемента
 
