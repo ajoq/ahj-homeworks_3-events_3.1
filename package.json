@@ -1,8 +1,8 @@
 {
-  "name": "ahj-homeworks_2-dom_2.1",
+  "name": "ahj-homeworks_3-events_3.1",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:ajoq/ahj-homeworks_2-dom_2.1",
+  "repository": "git@github.com:ajoq/ahj-homeworks_3-events_3.1",
   "author": "Konstantin Beloglazov <ajoq@ya.ru>",
   "license": "MIT",
   "devDependencies": {
