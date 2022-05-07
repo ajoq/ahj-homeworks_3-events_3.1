@@ -18,8 +18,18 @@ export default class Game {
         this.newGameBtn.addEventListener('click', () => this.startGame());
         this.stopGameBtn.addEventListener('click', () => this.stopGame());
         this.fieldList.addEventListener('click', (e) => this.gamePoints(e));
+
+        this.fieldList.addEventListener('mousedown', (e) => this.hammerDown(e));
+        this.fieldList.addEventListener('mouseup', (e) => this.hammerUp(e));
     }
 
+    hammerDown() {
+        this.fieldList.classList.add('hummer-bang');
+    }
+
+    hammerUp() {
+        this.fieldList.classList.remove('hummer-bang');
+    }  
 
     gamePoints(e) {
         const divGoblin = e.target.closest('div.field-item.field-item-img');
@@ -27,6 +37,7 @@ export default class Game {
 
         this.countPoints +=1;
         this.spanCountPoints.textContent = this.countPoints;
+        divGoblin.classList.remove('field-item-img');
     }
 
     getRandom(max, except) {
@@ -49,13 +60,10 @@ export default class Game {
     startGame() {
         this.gameOverDiv.classList.remove('display');
         this.stopGameBtn.disabled = false;
-        this.generateGoblin()
-        // this.field[this.randomItemNumber].classList.add('field-item-img');
+        this.generateGoblin();
 
         this.intervalId = setInterval(() => {
-            this.checkGameOver(); //не верно
-            this.removeGoblin();
-            this.generateGoblin();
+            this.stepGame();
           }, 1000);
     }
 
@@ -66,23 +74,32 @@ export default class Game {
         this.stopGameBtn.disabled = true;
     }
 
-    // widgetCounts() {
-    //     this.spanCountPoints.textContent = this.countPoints;
-    //     this.spanCountMissing.textContent = this.countMissing;
-    // }
-
     countsClear() {
         this.countPoints = 0;
         this.countMissing = 0;
-        // this.widgetCounts();
+        this.spanCountPoints.textContent = this.countPoints;
+        this.spanCountMissing.textContent = this.countMissing;
+    }
+
+    stepGame() {
+        const indexGoblin = this.field.findIndex((item) => item.classList.contains('field-item-img'));
+        if (indexGoblin === -1) {
+            this.generateGoblin();
+        } else {
+            this.removeGoblin();
+            this.checkGameOver();
+        }
     }
 
     checkGameOver() {
         this.countMissing += 1;
         this.spanCountMissing.textContent = this.countMissing;
-        if (this.countMissing === 6) {
+        if (this.countMissing === 5) {
+            this.removeGoblin();
             this.stopGame();
             this.gameOverDiv.classList.add('display');
-        }   
+        } else {
+            this.generateGoblin();
+        }  
     }
 }
