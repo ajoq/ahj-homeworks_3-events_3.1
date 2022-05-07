@@ -1,28 +1,32 @@
 export default class Game {
     constructor() {
-        this.field = Array.from(document.querySelectorAll('.field-item'));
-        this.randomItemNumber = this.getRandom(this.field.length);
+        this.randomItemNumber = 0;
         this.intervalId = null;
+        this.countPoints = 0;
+        this.countMissing = 0;
     }
 
     init() {
+        this.field = Array.from(document.querySelectorAll('.field-item'));
         this.newGameBtn = document.getElementById('start-game');
         this.stopGameBtn = document.getElementById('stop-game');
         this.fieldList = document.getElementById('field-list');
+        this.gameOverDiv = document.getElementById('game-over-id');
+        this.spanCountPoints = document.getElementById('count-points');
+        this.spanCountMissing = document.getElementById('count-missing');
 
         this.newGameBtn.addEventListener('click', () => this.startGame());
         this.stopGameBtn.addEventListener('click', () => this.stopGame());
         this.fieldList.addEventListener('click', (e) => this.gamePoints(e));
     }
 
-    currentGoblin() {
-        const currentGoblin = this.field.findIndex((item) => item.classList.contains('field-item-img'));
-        this.field[currentGoblin].classList.remove('field-item-img');
-    }
 
     gamePoints(e) {
         const divGoblin = e.target.closest('div.field-item.field-item-img');
-        console.log(divGoblin);
+        if (!divGoblin) return;
+
+        this.countPoints +=1;
+        this.spanCountPoints.textContent = this.countPoints;
     }
 
     getRandom(max, except) {
@@ -30,26 +34,55 @@ export default class Game {
         return num === except ? this.getRandom(max, except) : num;
     }
 
-    startGame() {
+    generateGoblin() {
+        this.randomItemNumber = this.getRandom(this.field.length, this.randomItemNumber);
         this.field[this.randomItemNumber].classList.add('field-item-img');
+    }
+
+    removeGoblin() {
+        const indexGoblin = this.field.findIndex((item) => item.classList.contains('field-item-img'));
+        if (indexGoblin != -1) {
+            this.field[indexGoblin].classList.remove('field-item-img');
+        }
+    }
+
+    startGame() {
+        this.gameOverDiv.classList.remove('display');
+        this.stopGameBtn.disabled = false;
+        this.generateGoblin()
+        // this.field[this.randomItemNumber].classList.add('field-item-img');
 
         this.intervalId = setInterval(() => {
-            this.currentGoblin();
-        
-            this.randomItemNumber = this.getRandom(this.field.length, this.randomItemNumber);
-        
-            this.field[this.randomItemNumber].classList.add('field-item-img');
+            this.checkGameOver(); //не верно
+            this.removeGoblin();
+            this.generateGoblin();
           }, 1000);
     }
 
     stopGame() {
+        this.removeGoblin();
         clearInterval(this.intervalId);
-        this.currentGoblin();
+        this.countsClear();
+        this.stopGameBtn.disabled = true;
+    }
+
+    // widgetCounts() {
+    //     this.spanCountPoints.textContent = this.countPoints;
+    //     this.spanCountMissing.textContent = this.countMissing;
+    // }
+
+    countsClear() {
+        this.countPoints = 0;
+        this.countMissing = 0;
+        // this.widgetCounts();
+    }
+
+    checkGameOver() {
+        this.countMissing += 1;
+        this.spanCountMissing.textContent = this.countMissing;
+        if (this.countMissing === 6) {
+            this.stopGame();
+            this.gameOverDiv.classList.add('display');
+        }   
     }
 }
-
-//Делегирование событий - отслеживать клик по полю - gamePoints
-//Отслеживать положение мыши над активным полем - курсор молоток
-//Счетчик очков
-//Счетчик появлений
-//Счетчик пропусков появлений
