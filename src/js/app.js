@@ -1,3 +1,4 @@
-import startGame from './startGame';
+import Game from './Game';
 
-startGame();
+const game = new Game();
+game.init();
