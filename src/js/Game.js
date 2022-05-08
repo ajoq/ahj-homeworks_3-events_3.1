@@ -79,6 +79,7 @@ export default class Game {
   startGame() {
     this.gameOverDiv.classList.remove('display');
     this.stopGameBtn.disabled = false;
+    this.newGameBtn.disabled = true;
     this.generateGoblin();
 
     this.intervalId = setInterval(() => {
@@ -101,5 +102,6 @@ export default class Game {
     clearInterval(this.intervalId);
     this.countsClear();
     this.stopGameBtn.disabled = true;
+    this.newGameBtn.disabled = false;
   }
 }
