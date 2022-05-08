@@ -19,8 +19,27 @@ export default class Game {
     this.stopGameBtn.addEventListener('click', () => this.stopGame());
     this.fieldList.addEventListener('click', (e) => this.gamePoints(e));
 
-    this.fieldList.addEventListener('mousedown', (e) => this.hammerDown(e));
-    this.fieldList.addEventListener('mouseup', (e) => this.hammerUp(e));
+    this.fieldList.addEventListener('pointerdown', (e) => this.hammerDown(e));
+    this.fieldList.addEventListener('pointerup', (e) => this.hammerUp(e));
+  }
+
+  checkGameOver() {
+    this.countMissing += 1;
+    this.spanCountMissing.textContent = this.countMissing;
+    if (this.countMissing === 5) {
+      this.removeGoblin();
+      this.stopGame();
+      this.gameOverDiv.classList.add('display');
+    } else {
+      this.generateGoblin();
+    }
+  }
+
+  countsClear() {
+    this.countPoints = 0;
+    this.countMissing = 0;
+    this.spanCountPoints.textContent = this.countPoints;
+    this.spanCountMissing.textContent = this.countMissing;
   }
 
   hammerDown() {
@@ -67,20 +86,6 @@ export default class Game {
     }, 1000);
   }
 
-  stopGame() {
-    this.removeGoblin();
-    clearInterval(this.intervalId);
-    this.countsClear();
-    this.stopGameBtn.disabled = true;
-  }
-
-  countsClear() {
-    this.countPoints = 0;
-    this.countMissing = 0;
-    this.spanCountPoints.textContent = this.countPoints;
-    this.spanCountMissing.textContent = this.countMissing;
-  }
-
   stepGame() {
     const indexGoblin = this.field.findIndex((item) => item.classList.contains('field-item-img'));
     if (indexGoblin === -1) {
@@ -91,15 +96,10 @@ export default class Game {
     }
   }
 
-  checkGameOver() {
-    this.countMissing += 1;
-    this.spanCountMissing.textContent = this.countMissing;
-    if (this.countMissing === 5) {
-      this.removeGoblin();
-      this.stopGame();
-      this.gameOverDiv.classList.add('display');
-    } else {
-      this.generateGoblin();
-    }
+  stopGame() {
+    this.removeGoblin();
+    clearInterval(this.intervalId);
+    this.countsClear();
+    this.stopGameBtn.disabled = true;
   }
 }
