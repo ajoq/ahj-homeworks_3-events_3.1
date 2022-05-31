@@ -14,25 +14,23 @@ export default class Game {
     this.gameOverDiv = document.getElementById('game-over-id');
     this.spanCountPoints = document.getElementById('count-points');
     this.spanCountMissing = document.getElementById('count-missing');
+    this.gamePointsFunc = this.gamePoints.bind(this);
 
     this.newGameBtn.addEventListener('click', () => this.startGame());
     this.stopGameBtn.addEventListener('click', () => this.stopGame());
-    this.fieldList.addEventListener('click', (e) => this.gamePoints(e));
 
     this.fieldList.addEventListener('pointerdown', (e) => this.hammerDown(e));
     this.fieldList.addEventListener('pointerup', (e) => this.hammerUp(e));
   }
 
   checkGameOver() {
-    this.countMissing += 1;
-    this.spanCountMissing.textContent = this.countMissing;
     if (this.countMissing === 5) {
       this.removeGoblin();
       this.stopGame();
       this.gameOverDiv.classList.add('display');
-    } else {
-      this.generateGoblin();
+      return true;
     }
+    return false;
   }
 
   countsClear() {
@@ -52,7 +50,11 @@ export default class Game {
 
   gamePoints(e) {
     const divGoblin = e.target.closest('div.field-item.field-item-img');
-    if (!divGoblin) return;
+    if (!divGoblin) {
+      this.missingGoblin();
+      this.checkGameOver();
+      return;
+    }
 
     this.countPoints += 1;
     this.spanCountPoints.textContent = this.countPoints;
@@ -62,6 +64,11 @@ export default class Game {
   getRandom(max, except) {
     const num = Math.floor(Math.random() * max);
     return num === except ? this.getRandom(max, except) : num;
+  }
+
+  missingGoblin() {
+    this.countMissing += 1;
+    this.spanCountMissing.textContent = this.countMissing;
   }
 
   generateGoblin() {
@@ -77,6 +84,7 @@ export default class Game {
   }
 
   startGame() {
+    this.fieldList.addEventListener('click', this.gamePointsFunc);
     this.gameOverDiv.classList.remove('display');
     this.stopGameBtn.disabled = false;
     this.newGameBtn.disabled = true;
@@ -93,13 +101,17 @@ export default class Game {
       this.generateGoblin();
     } else {
       this.removeGoblin();
-      this.checkGameOver();
+      this.missingGoblin();
+      if (!this.checkGameOver()) {
+        this.generateGoblin();
+      }
     }
   }
 
   stopGame() {
     this.removeGoblin();
     clearInterval(this.intervalId);
+    this.fieldList.removeEventListener('click', this.gamePointsFunc);
     this.countsClear();
     this.stopGameBtn.disabled = true;
     this.newGameBtn.disabled = false;
